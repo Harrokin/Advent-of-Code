@@ -2,18 +2,10 @@ use std::fs;
 use regex::Regex;
 use substring::Substring;
 
-fn main() {
-
-    let input = fs::read_to_string("input.txt")
-        .expect("Should have been able to read the file");
-
-    let ranges: Vec<&str> = contents.split(",").collect();
-    for str in ranges
-    {
-
 
         //So take the lower number
         //take first half of it and see if first half dup'd is in range ASSUMING IT CAN DUPE - SINGLE DIGITS ARE AN EDGE CASE
+                                                            //If our lowest is a single digit - the first dupe is like 11 - so check 11 is in range
         //  if no, move on - no possible invalid IDs
         //  if it is, +1! (and maybe save for later?)
         //      Now if we increment first digit, is the dupe in range?
@@ -26,7 +18,39 @@ fn main() {
         //6900 is! - remember, we only care about the first half here
         //Therefore 5050, 5151, 5252, 5353, 5454, 5555, 5656, 5757, 5858, 5959, 6060, 6161, 6262, 6363, 6464, 6565, 6666, 6767, 6868, 6969  are all part 
                         //- which is 20, or ten per the second LSDigit 
+                        //also equal to 5050 * 10, plus 1+2+3+4+5+6+7+8+9, plus 100+200etcetc
+                        //1+2+3+4+5+6+7+8+9 = 45
+                        //3500 for the hundreds
+                        //So unchanged digits * 10 plus 45 multiplied by the appropriate power of 10 for each changing digit
+                        //To test: our example would be 5050 * 10 + 6060 * 10 + 4545 +4545 =50500 +60600+9090=111100+9090=120190! It works!
+                        // in this case hundreds are paired with units, because we're 4 digits so our LSDigit for the first half IS the hundreds, and LSD for second half is units
+                        //might be easier to just iterate and add
+                        //But surely it's possible to do multi stuff...
         //would be 10x more per next significant digit
         //Since 6900 is but 7000 isn't, we need to check 6969 (which in this case is) if it isn't, we -1
+
+
+        //What if we take difference and divide by 100 - that gives 
+
+
+fn main() {
+
+    let input = fs::read_to_string("example.txt")
+        .expect("Should have been able to read the file");
+
+    let ranges: Vec<&str> = input.split(",").collect();
+    for str in ranges
+    {
+        let numbers: Vec<&str> = str.split("-").collect();
+        if numbers[0].len()%2 == 0 && numbers[1].parse::<u64>().expect("NaN") > 11
+        {
+            let lowest_dupe: u64 = format!("{}{}",numbers[0].substring(0,numbers[0].len()/2),numbers[0].substring(0,numbers[0].len()/2)).parse::<u64>().expect("NaN");
+            let lower_bound: u64 = numbers[0].parse::<u64>().expect("NaN");
+            let upper_bound: u64 = numbers[1].parse::<u64>().expect("NaN");
+            if lowest_dupe <= upper_bound && lowest_dupe >= lower_bound
+            {
+                println!("Potential invalids between {} and {}.", lower_bound, upper_bound);
+            }
+        }
     }
 }
