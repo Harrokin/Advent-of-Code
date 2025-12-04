@@ -58,11 +58,11 @@ fn main() {
 
         current_place += amount*dir;
 
-        while current_place > 99
+        if current_place > 99
         {
             current_place -= 100;
         }
-        while current_place<0 
+        if current_place<0 
         {
             current_place += 100;
         }
