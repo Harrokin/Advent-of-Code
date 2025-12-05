@@ -31,6 +31,27 @@ use substring::Substring;
 
 
         //What if we take difference and divide by 100 - that gives 
+        //base case of 0-100
+        //  11 + 22 + 33 + 44 + 55 + 66 + 77 + 88 + 99 = 450 + 45
+        // 0-1000
+        //  11-99 =495
+        //  100-999 nothing!
+        // 0-10000
+        //  11-99=495
+        //  100-999=0
+        //  1000-10000
+        //    1010+1111+1212+1313+1414+1515+1616+1717+1818+1919 = 4500 (45 times ten power of LSB) + 45 (is also 45*10^bit) + 10*MSB (in this case 10k)
+        //    2020+2121+2222+2323+2424+2525+2626+2727+2828+2929 = 4500 (45*10^bit3) + 45 (45*10^bit0) + 10*(MSB=2000)
+        //    ... = 4500 + 45 + 10*(3000)
+        //    ... = 4500 + 45 + 10*4000
+        //    ...
+        //    ...
+        //    ...
+        //    ...
+        //    9090+9191+9292+9393+9494+9595+9696+9797+9898+9999 = 4500 + 45 + 10*9000
+
+        //Since it's sum, value of sum of invalid IDs between two ranges = sum of ALL invalid IDs up to upper - sum of ALL invalid IDs up to lower
+        //Ergo if we can do a quick calc to sum invalid IDs we can do this super duper easily.
 
 
 fn main() {
